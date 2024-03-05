@@ -9,4 +9,4 @@ with open('LV1\song.txt', 'r') as f:
             word_count[word] += 1
 
 single_occurance = [word for word, count in word_count.items() if count == 1]
-print("Words that appear only once:", single_occurance)
+print("Words that appear only once:", single_occurance.__len__())
