@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 img = plt.imread('road.jpg')
 
 # a) 
-img = img + 50
+img = img + 10
 plt.figure()
 plt.imshow(img)
 plt.show()
