@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-data = pd.read_csv('LV3\data_C02_emission.csv')
+data = pd.read_csv('data_C02_emission.csv')
 data['Make'] = data['Make'].astype('category')
 data['Model'] = data['Model'].astype('category')
 data['Vehicle Class'] = data['Vehicle Class'].astype('category')
@@ -56,10 +56,21 @@ print('Broj vozila po broju cilindara: ', cylinder_count)
 print('Prosjecna emisija CO2 plinova s obzirom na broj cilindara: ', avg_co2_emission_per_cylinder)
 
 # f)
-
+fuel_type_grouped = data.groupby('Fuel Type')
+avg_city_fuel_consumption = fuel_type_grouped['Fuel Consumption City (L/100km)'].mean()
+print('Prosjecna potrosnja goriva u gradu po tipu goriva: ', avg_city_fuel_consumption)
+median_city_fuel_consumption = fuel_type_grouped['Fuel Consumption City (L/100km)'].median()
+print('Medijalna potrosnja goriva u gradu po tipu goriva: ', median_city_fuel_consumption)
 
 # g)
+vehicle_filtered = data[(data['Cylinders'] == 4) & (data['Fuel Type'] == 'D')]
+highest_city_consumption = vehicle_filtered['Fuel Consumption City (L/100km)'].max()
+print('Vozilo s najvecom potrosnjom goriva u gradu: ', vehicle_filtered[vehicle_filtered['Fuel Consumption City (L/100km)'] == highest_city_consumption][['Make', 'Model']])
 
 # h)
+manual_transmission = data[(data['Transmission'].str[0] == 'M')]
+length = len(manual_transmission['Make'])
+print('Broj vozila s rucnim mjenjacem: ', length)
 
 # i)
+print(data.corr(numeric_only=True))
