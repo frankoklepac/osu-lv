@@ -20,6 +20,7 @@ X = dataframe[['Engine Size (L)',
                'Fuel Consumption Hwy (L/100km)', 
                'Fuel Consumption Comb (L/100km)', 
                'Fuel Consumption Comb (mpg)']]
+
 X = pd.concat([pd.DataFrame(X_encoded, columns=ohe.get_feature_names_out(['Fuel Type'])), X], axis=1)
 y = dataframe['CO2 Emissions (g/km)']
 
@@ -37,4 +38,4 @@ data_point_y = y.iloc[max_error_index]
 data_point = dataframe.iloc[max_error_index]
 print("X: ", data_point_X)
 print("y: ", data_point_y)
-print(data_point)
+print(data_point['Make'], data_point['Model'])
