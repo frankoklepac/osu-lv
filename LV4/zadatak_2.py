@@ -14,7 +14,12 @@ dataframe = pd.read_csv('LV4/data_C02_emission.csv')
 ohe = OneHotEncoder ()
 X_encoded = ohe.fit_transform(dataframe[['Fuel Type']]).toarray()
 
-X = dataframe[['Engine Size (L)', 'Cylinders', 'Fuel Consumption City (L/100km)', 'Fuel Consumption Hwy (L/100km)', 'Fuel Consumption Comb (L/100km)', 'Fuel Consumption Comb (mpg)']]
+X = dataframe[['Engine Size (L)', 
+               'Cylinders', 
+               'Fuel Consumption City (L/100km)', 
+               'Fuel Consumption Hwy (L/100km)', 
+               'Fuel Consumption Comb (L/100km)', 
+               'Fuel Consumption Comb (mpg)']]
 X = pd.concat([pd.DataFrame(X_encoded, columns=ohe.get_feature_names_out(['Fuel Type'])), X], axis=1)
 y = dataframe['CO2 Emissions (g/km)']
 

@@ -10,5 +10,3 @@ sc = MinMaxScaler()
 X_train_n = sc.fit_transform(X_train)
 X_test_n = sc.transform(X_test)
 
-print(X_train_n)
-print(X_test_n)
