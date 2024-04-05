@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 from sklearn.model_selection import train_test_split
 
+from sklearn.linear_model import LogisticRegression
+
+
 labels= {0:'Adelie', 1:'Chinstrap', 2:'Gentoo'}
 
 def plot_decision_regions(X, y, classifier, resolution=0.02):
@@ -66,3 +69,46 @@ y = df[output_variable].to_numpy()
 # podjela train/test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 123)
 
+# a)
+# Pomocu stupcastog dijagrama prikazite koliko primjera postoji za svaku klasu (vrstu
+# pingvina) u skupu podataka za ucenje i skupu podataka za testiranje. Koristite numpy
+# funkciju unique.
+
+unique, counts = np.unique(y_train, return_counts=True)
+plt.bar(unique, counts, color='blue')
+plt.xticks(unique, labels.values())
+plt.title('Train data')
+plt.show()
+
+# b)
+# Izgradite model logisticke regresije pomocu scikit-learn biblioteke na temelju skupa podataka
+# za ucenje.
+
+log_reg = LogisticRegression()
+log_reg.fit(X_train, y_train)
+
+# c)
+# Pronadite u atributima izgradenog modela parametre modela. Koja je razlika u odnosu na
+# binarni klasifikacijski problem iz prvog zadatka?
+
+theta0 = log_reg.intercept_
+theta1, theta2 = log_reg.coef_[0]
+print('theta0: ', theta0)
+print('theta1: ', theta1)
+print('theta2: ', theta2)
+
+# d)
+# Pozovite funkciju plot_decision_region pri cemu joj predajte podatke za ucenje i
+# izgradeni model logisticke regresije. Kako komentirate dobivene rezultate?
+
+
+
+# e)
+# Provedite klasifikaciju skupa podataka za testiranje pomocu izgradenog modela logisticke
+# regresije. Izracunajte i prikažite matricu zabune na testnim podacima. Izracunajte tocnost.
+# Pomocu classification_report funkcije izracunajte vrijednost cetiri glavne metrike
+# na skupu podataka za testiranje.
+
+# f)
+# Dodajte u model još ulaznih velicina. Što se dogada s rezultatima klasifikacije na skupu
+# podataka za testiranje?
