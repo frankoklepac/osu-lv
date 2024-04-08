@@ -82,3 +82,46 @@ plt.title("Tocnost: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p))))
 plt.tight_layout()
 plt.show()
 
+
+# 1. Izradite algoritam KNN na skupu podataka za ucenje (uz K=5). Izracunajte tocnost
+# klasifikacije na skupu podataka za ucenje i skupu podataka za testiranje. Usporedite
+# dobivene rezultate s rezultatima logisticke regresije. Što primjecujete vezano uz dobivenu
+# granicu odluke KNN modela?
+
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train_n, y_train)
+
+y_train_p_KNN = knn.predict(X_train_n)
+y_test_p_KNN = knn.predict(X_test_n)
+
+print("KNN (K=5) Accuracy, Training Set: {:0.3f}".format(accuracy_score(y_train, y_train_p_KNN)))
+print("KNN (K=5) Accuracy, Testing Set: {:0.3f}".format(accuracy_score(y_test, y_test_p_KNN)))
+
+
+# 2. Kako izgleda granica odluke kada je K =1 i kada je K = 100?
+
+for K in [1, 100]:
+    knn = KNeighborsClassifier(n_neighbors=K)
+    knn.fit(X_train_n, y_train)
+    y_train_pred = knn.predict(X_train_n)
+    y_test_pred = knn.predict(X_test_n)
+    print("KNN (K={}) Accuracy, Training Set: {:0.3f}".format(K, accuracy_score(y_train, y_train_p_KNN)))
+    print("KNN (K={}) Accuracy, Testing Set: {:0.3f}".format(K, accuracy_score(y_test, y_test_p_KNN)))
+    plot_decision_regions(X_train_n, y_train, classifier=knn)
+    plt.xlabel('x_1')
+    plt.ylabel('x_2')
+    plt.legend(loc='upper left')
+    plt.title("KNN (K={}) Accuracy: {:0.3f}".format(K, accuracy_score(y_train, y_train_p_KNN)))
+    plt.tight_layout()
+    plt.show()
+
+# 6.5.2 Pomocu unakrsne validacije odredite optimalnu vrijednost hiperparametra K
+# algoritma KNN za podatke iz Zadatka 1.
+
+pipe = Pipeline([('scaler', StandardScaler()), ('knn', KNeighborsClassifier())])
+param_grid = {'knn__n_neighbors': np.arange(1, 50)}
+grid = GridSearchCV(pipe, param_grid, cv=10)
+grid.fit(X_train, y_train)
+print("Najbolji parametri: ", grid.best_params_)
+print("Tocnost: ", grid.best_score_)
+print("Tocnost na testnom skupu: ", grid.score(X_test, y_test))
