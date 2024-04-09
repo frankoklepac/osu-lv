@@ -98,15 +98,15 @@ print("KNN (K=5) Accuracy, Training Set: {:0.3f}".format(accuracy_score(y_train,
 print("KNN (K=5) Accuracy, Testing Set: {:0.3f}".format(accuracy_score(y_test, y_test_p_KNN)))
 
 
-# 2. Kako izgleda granica odluke kada je K =1 i kada je K = 100?
+# 2. Kako izgleda granica odluke kada je K = 1 i kada je K = 100?
 
 for K in [1, 100]:
     knn = KNeighborsClassifier(n_neighbors=K)
     knn.fit(X_train_n, y_train)
     y_train_pred = knn.predict(X_train_n)
     y_test_pred = knn.predict(X_test_n)
-    print("KNN (K={}) Accuracy, Training Set: {:0.3f}".format(K, accuracy_score(y_train, y_train_p_KNN)))
-    print("KNN (K={}) Accuracy, Testing Set: {:0.3f}".format(K, accuracy_score(y_test, y_test_p_KNN)))
+    print("KNN (K={}) Tocnost, Trening Set: {:0.3f}".format(K, accuracy_score(y_train, y_train_p_KNN)))
+    print("KNN (K={}) Tocnost, Trening Set: {:0.3f}".format(K, accuracy_score(y_test, y_test_p_KNN)))
     plot_decision_regions(X_train_n, y_train, classifier=knn)
     plt.xlabel('x_1')
     plt.ylabel('x_2')
@@ -125,3 +125,45 @@ grid.fit(X_train, y_train)
 print("Najbolji parametri: ", grid.best_params_)
 print("Tocnost: ", grid.best_score_)
 print("Tocnost na testnom skupu: ", grid.score(X_test, y_test))
+
+# Zadatak 6.5.3 Na podatke iz Zadatka 1 primijenite SVM model koji koristi RBF kernel funkciju
+# te prikazite dobivenu granicu odluke. Mijenjajte vrijednost hiperparametra C i γ. Kako promjena
+# ovih hiperparametara utjece na granicu odluke te pogresku na skupu podataka za testiranje?
+# Mijenjajte tip kernela koji se koristi. Što primjecujete?
+
+def apply_SVM(c, gamma):
+    svm_model = svm.SVC(kernel='rbf', C=c, gamma=gamma)
+    svm_model.fit(X_train_n, y_train)
+
+    y_test_p_SVM = svm_model.predict(X_test_n)
+    y_train_p_SVM = svm_model.predict(X_train_n)
+
+    print("SVM: C: {}, gamma: {}".format(c, gamma))
+    print("Tocnost train: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p_SVM))))
+    print("Tocnost test: " + "{:0.3f}".format((accuracy_score(y_test, y_test_p_SVM))))
+
+    plot_decision_regions(X_train_n, y_train, classifier=svm_model)
+    plt.xlabel('x1')
+    plt.ylabel('x2')
+    plt.legend(loc='upper left')
+    plt.title("Tocnost: " + "{:0.3f}".format((accuracy_score(y_train, y_train_p_SVM))))
+    plt.tight_layout()
+    plt.show()
+
+apply_SVM(1, 0.1)
+apply_SVM(1, 1)
+apply_SVM(10, 0.1)
+
+
+# Zadatak 6.5.4 Pomocu unakrsne validacije odredite optimalnu vrijednost hiperparametra C i γ
+# algoritma SVM za problem iz Zadatka 1.
+
+pipe = Pipeline([('scaler', StandardScaler()), ('svm', svm.SVC(kernel='rbf'))])
+param_grid = {'svm__C': [0.1, 1, 10], 'svm__gamma': [0.1, 1, 10]}
+grid = GridSearchCV(pipe, param_grid, cv=10)
+grid.fit(X_train, y_train)
+print("Najbolji parametri: ", grid.best_params_)
+print("Tocnost: ", grid.best_score_)
+print("Tocnost na testnom skupu: ", grid.score(X_test, y_test))
+
+          
