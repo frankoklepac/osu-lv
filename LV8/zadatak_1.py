@@ -4,6 +4,7 @@ from keras import layers
 from matplotlib import pyplot as plt
 from sklearn.metrics import confusion_matrix
 from keras import utils as image
+
 # Model / data parameters
 num_classes = 10
 input_shape = (28, 28, 1)
@@ -56,7 +57,7 @@ model.summary()
 model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
 # TODO: provedi ucenje mreze
-model.fit(x_train_vector, y_train_s, batch_size=32, epochs=20, validation_split=0.1)
+model.fit(x_train_vector, y_train_s, batch_size=32, epochs=50, validation_split=0.1)
 
 # TODO: Prikazi test accuracy i matricu zabune
 score = model.evaluate(x_test_vector, y_test_s, verbose=0)
@@ -88,7 +89,7 @@ for i in range(300):
 
 # Ovdje se nalazi rjesenje zadatak 3, razlog isti isti kao i kod zadatka 2
 
-img = image.load_img("LV8\example-number-7.jpg", target_size = (28, 28), color_mode = "grayscale")
+img = image.load_img("LV8/example-number-5.jpg", target_size = (28, 28), color_mode = "grayscale")
 img_array = image.img_to_array(img)
 
 img_array = img_array.astype("float32") / 255
